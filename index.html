@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bathopedi Initiative — Coming Soon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Karla:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#17171a;
+    --gold:#c99735;
+    --gold-deep:#a97e22;
+    --cream:#f7f2e7;
+    --white:#fffdf8;
+    --stone:#716c60;
+    --line: rgba(23,23,26,0.12);
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{
+    margin:0;
+    padding:0;
+    height:100%;
+  }
+
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Karla', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* faint textured backdrop so the cream isn't flat */
+  .backdrop{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 8%, rgba(201,151,53,0.10), transparent 60%),
+      radial-gradient(ellipse 55% 35% at 85% 92%, rgba(23,23,26,0.06), transparent 60%);
+    pointer-events:none;
+  }
+
+  .wrap{
+    position:relative;
+    z-index:1;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:8vh 6vw 6vh;
+    text-align:center;
+  }
+
+  .logo{
+    width:132px;
+    height:auto;
+    margin-bottom:8px;
+    opacity:0;
+    transform:translateY(14px);
+    animation:rise 0.9s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+
+  .eyebrow{
+    font-size:0.78rem;
+    letter-spacing:0.14em;
+    color:var(--stone);
+    margin:22px 0 6px;
+    opacity:0;
+    animation:rise 0.9s cubic-bezier(.2,.7,.2,1) forwards;
+    animation-delay:0.15s;
+  }
+
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:clamp(2.4rem, 6vw, 4.4rem);
+    line-height:1.06;
+    margin:0 0 22px;
+    max-width:14ch;
+    letter-spacing:-0.01em;
+    opacity:0;
+    animation:rise 0.9s cubic-bezier(.2,.7,.2,1) forwards;
+    animation-delay:0.28s;
+  }
+
+  h1 em{
+    font-style:italic;
+    color:var(--gold-deep);
+  }
+
+  .lede{
+    max-width:46ch;
+    font-size:1.06rem;
+    line-height:1.65;
+    color:#3d3b35;
+    margin:0 0 44px;
+    opacity:0;
+    animation:rise 0.9s cubic-bezier(.2,.7,.2,1) forwards;
+    animation-delay:0.4s;
+  }
+
+  /* the signature moment: two paths crossing and settling, echoing the mark */
+  .cross{
+    width:min(360px, 70vw);
+    height:60px;
+    margin-bottom:44px;
+    opacity:0;
+    animation:rise 0.9s cubic-bezier(.2,.7,.2,1) forwards;
+    animation-delay:0.5s;
+  }
+  .cross svg{ width:100%; height:100%; display:block; }
+  .cross path{
+    fill:none;
+    stroke-width:3;
+    stroke-linecap:round;
+    stroke-dasharray:220;
+    stroke-dashoffset:220;
+    animation:draw 1.6s ease-out forwards;
+    animation-delay:0.9s;
+  }
+  .cross .path-ink{ stroke:var(--ink); }
+  .cross .path-gold{ stroke:var(--gold); animation-delay:1.05s; }
+
+  .pillars{
+    display:flex;
+    gap:0;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    opacity:0;
+    animation:rise 0.9s cubic-bezier(.2,.7,.2,1) forwards;
+    animation-delay:0.62s;
+  }
+
+  .pillar{
+    padding:26px 40px;
+    text-align:left;
+  }
+  .pillar + .pillar{
+    border-left:1px solid var(--line);
+  }
+  .pillar .label{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:1.15rem;
+    color:var(--ink);
+    margin:0 0 6px;
+  }
+  .pillar .desc{
+    font-size:0.88rem;
+    color:var(--stone);
+    max-width:24ch;
+    line-height:1.5;
+    margin:0;
+  }
+
+  .notify{
+    margin-top:52px;
+    display:flex;
+    gap:10px;
+    width:100%;
+    max-width:400px;
+    opacity:0;
+    animation:rise 0.9s cubic-bezier(.2,.7,.2,1) forwards;
+    animation-delay:0.74s;
+  }
+
+  .notify input[type="email"]{
+    flex:1;
+    padding:13px 16px;
+    border:1px solid var(--line);
+    background:var(--white);
+    border-radius:2px;
+    font-family:'Karla', sans-serif;
+    font-size:0.95rem;
+    color:var(--ink);
+    outline:none;
+    transition:border-color 0.2s ease;
+  }
+  .notify input[type="email"]:focus{
+    border-color:var(--gold-deep);
+  }
+  .notify input[type="email"]::placeholder{
+    color:#9a9385;
+  }
+
+  .notify button{
+    padding:13px 22px;
+    border:none;
+    border-radius:2px;
+    background:var(--ink);
+    color:var(--white);
+    font-family:'Karla', sans-serif;
+    font-weight:600;
+    font-size:0.9rem;
+    cursor:pointer;
+    transition:background 0.2s ease;
+    white-space:nowrap;
+  }
+  .notify button:hover{
+    background:var(--gold-deep);
+  }
+  .notify button:focus-visible,
+  .notify input:focus-visible{
+    outline:2px solid var(--gold-deep);
+    outline-offset:2px;
+  }
+
+  .confirm{
+    margin-top:14px;
+    font-size:0.85rem;
+    color:var(--gold-deep);
+    display:none;
+  }
+  .confirm.show{ display:block; }
+
+  footer{
+    position:relative;
+    z-index:1;
+    padding:26px 6vw 34px;
+    text-align:center;
+    font-size:0.78rem;
+    color:#9a9385;
+    letter-spacing:0.02em;
+  }
+
+  @keyframes rise{
+    to{ opacity:1; transform:translateY(0); }
+  }
+  @keyframes draw{
+    to{ stroke-dashoffset:0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .logo,.eyebrow,h1,.lede,.cross,.pillars,.notify{
+      animation:none !important;
+      opacity:1 !important;
+      transform:none !important;
+    }
+    .cross path{
+      animation:none !important;
+      stroke-dashoffset:0 !important;
+    }
+  }
+
+  @media (max-width: 560px){
+    .pillars{ flex-direction:column; }
+    .pillar + .pillar{ border-left:none; border-top:1px solid var(--line); }
+    .notify{ flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="backdrop"></div>
+
+  <div class="wrap">
+    <img class="logo" src="logo.png" alt="Bathopedi Initiative logo">
+
+    <p class="eyebrow">Bathopedi Initiative</p>
+
+    <h1>Building toward <em>Bathopedi</em>, together.</h1>
+
+    <p class="lede">
+      A home for economic upliftment and spiritual growth in our community.
+      We're laying the foundation — the site is on its way.
+    </p>
+
+    <div class="cross" aria-hidden="true">
+      <svg viewBox="0 0 360 60" xmlns="http://www.w3.org/2000/svg">
+        <path class="path-ink" d="M10,50 C110,50 150,10 180,10"></path>
+        <path class="path-gold" d="M350,50 C250,50 210,10 180,10"></path>
+      </svg>
+    </div>
+
+    <div class="pillars">
+      <div class="pillar">
+        <p class="label">Economy</p>
+        <p class="desc">Practical support and opportunity for families to build sustainable livelihoods.</p>
+      </div>
+      <div class="pillar">
+        <p class="label">Spiritual Growth</p>
+        <p class="desc">Space to grow in faith and character, rooted in service to one another.</p>
+      </div>
+    </div>
+
+    <form class="notify" id="notifyForm">
+      <input type="email" id="emailInput" placeholder="Your email address" required aria-label="Email address">
+      <button type="submit">Notify me</button>
+    </form>
+    <p class="confirm" id="confirmMsg">Thank you — we'll let you know when we launch.</p>
+  </div>
+
+  <footer>&copy; 2026 Bathopedi Initiative. Site launching soon.</footer>
+
+  <script>
+    document.getElementById('notifyForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      var input = document.getElementById('emailInput');
+      var confirm = document.getElementById('confirmMsg');
+      if(input.checkValidity()){
+        confirm.classList.add('show');
+        input.value = '';
+      }
+    });
+  </script>
+
+</body>
+</html>
