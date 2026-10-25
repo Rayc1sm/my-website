@@ -1,14 +1,28 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bathopedi Initiative — Coming Soon</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none';">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Bathopedi Initiative | Growing People. Strengthening Families. Building Communities.</title>
+<meta name="description" content="Bathopedi Initiative helps people build better lives through economic opportunity, counselling, family support and community growth.">
+<meta property="og:title" content="Bathopedi Initiative">
+<meta property="og:description" content="Growing people. Strengthening families. Building communities.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Karla:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  /* Progressive enhancement: browsers that support the View Transitions
+     API (Chrome/Edge 126+) get a smooth cross-fade between pages.
+     Unsupported browsers simply ignore this rule and navigate normally. */
+  @view-transition {
+    navigation: auto;
+  }
   :root{
     --ink:#17171a;
     --gold:#c99735;
@@ -16,16 +30,85 @@
     --cream:#f7f2e7;
     --white:#fffdf8;
     --stone:#716c60;
+    --moss:#565f45;
     --line: rgba(23,23,26,0.12);
+    --line-soft: rgba(23,23,26,0.07);
+  }
+
+  /* ============ ENTRANCE REVEAL ============
+     A brief full-screen splash shown once per browser session on first
+     arrival. Pure CSS animation with animation-fill-mode:forwards, so
+     it disappears on its own even if JavaScript never runs (the inline
+     script below only adds the "don't replay on repeat visits" and
+     click/skip niceties on top of that guaranteed behaviour). */
+  .entrance-reveal{
+    position:fixed;
+    top:0; right:0; bottom:0; left:0;
+    z-index:9999;
+    background:var(--cream);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    animation:entranceOut 0.5s ease forwards;
+    animation-delay:1.7s;
+  }
+  .entrance-inner{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding:0 24px;
+  }
+  .entrance-logo{
+    width:64px;
+    height:64px;
+    object-fit:contain;
+    opacity:0;
+    transform:scale(0.85);
+    animation:entranceLogoIn 0.7s cubic-bezier(.2,.7,.2,1) forwards;
+    animation-delay:0.15s;
+  }
+  .entrance-name{
+    margin:18px 0 0;
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:clamp(1.2rem, 4vw, 1.5rem);
+    color:var(--ink);
+    opacity:0;
+    transform:translateY(10px);
+    animation:entranceTextIn 0.6s cubic-bezier(.2,.7,.2,1) forwards;
+    animation-delay:0.55s;
+  }
+  .entrance-tagline{
+    margin:8px 0 0;
+    font-family:'Karla', sans-serif;
+    font-size:0.92rem;
+    color:var(--stone);
+    letter-spacing:0.01em;
+    opacity:0;
+    transform:translateY(10px);
+    animation:entranceTextIn 0.6s cubic-bezier(.2,.7,.2,1) forwards;
+    animation-delay:0.85s;
+  }
+  @keyframes entranceLogoIn{ to{ opacity:1; transform:scale(1); } }
+  @keyframes entranceTextIn{ to{ opacity:1; transform:translateY(0); } }
+  @keyframes entranceOut{ to{ opacity:0; visibility:hidden; pointer-events:none; } }
+
+  @media (prefers-reduced-motion: reduce){
+    .entrance-reveal{
+      animation-duration:0.25s !important;
+      animation-delay:0.1s !important;
+    }
+    .entrance-logo, .entrance-name, .entrance-tagline{
+      animation:none !important;
+      opacity:1 !important;
+      transform:none !important;
+    }
   }
 
   *{box-sizing:border-box;}
-
-  html,body{
-    margin:0;
-    padding:0;
-    height:100%;
-  }
+  html{scroll-behavior:smooth;}
+  html,body{margin:0;padding:0;}
 
   body{
     background:var(--cream);
@@ -33,283 +116,1890 @@
     font-family:'Karla', sans-serif;
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
+    line-height:1.5;
   }
 
-  /* faint textured backdrop so the cream isn't flat */
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+
+  p{margin:0;}
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  button{font-family:inherit;}
+
   .backdrop{
     position:fixed;
     inset:0;
     z-index:0;
     background:
-      radial-gradient(ellipse 60% 40% at 20% 8%, rgba(201,151,53,0.10), transparent 60%),
-      radial-gradient(ellipse 55% 35% at 85% 92%, rgba(23,23,26,0.06), transparent 60%);
+      radial-gradient(ellipse 60% 40% at 18% 6%, rgba(201,151,53,0.10), transparent 60%),
+      radial-gradient(ellipse 55% 35% at 88% 96%, rgba(23,23,26,0.05), transparent 60%),
+      radial-gradient(ellipse 40% 30% at 50% 50%, rgba(86,95,69,0.03), transparent 70%);
     pointer-events:none;
   }
 
-  .wrap{
+  .noise{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    opacity:0.025;
+    pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .container{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 6vw;
     position:relative;
     z-index:1;
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    padding:8vh 6vw 6vh;
-    text-align:center;
   }
 
-  .logo{
-    width:132px;
-    height:auto;
-    margin-bottom:8px;
-    opacity:0;
-    transform:translateY(14px);
-    animation:rise 0.9s cubic-bezier(.2,.7,.2,1) forwards;
-  }
-
-  .eyebrow{
-    font-size:0.78rem;
-    letter-spacing:0.14em;
-    color:var(--stone);
-    margin:22px 0 6px;
-    opacity:0;
-    animation:rise 0.9s cubic-bezier(.2,.7,.2,1) forwards;
-    animation-delay:0.15s;
-  }
-
-  h1{
-    font-family:'Fraunces', serif;
-    font-weight:500;
-    font-size:clamp(2.4rem, 6vw, 4.4rem);
-    line-height:1.06;
-    margin:0 0 22px;
-    max-width:14ch;
-    letter-spacing:-0.01em;
-    opacity:0;
-    animation:rise 0.9s cubic-bezier(.2,.7,.2,1) forwards;
-    animation-delay:0.28s;
-  }
-
-  h1 em{
-    font-style:italic;
-    color:var(--gold-deep);
-  }
-
-  .lede{
-    max-width:46ch;
-    font-size:1.06rem;
-    line-height:1.65;
-    color:#3d3b35;
-    margin:0 0 44px;
-    opacity:0;
-    animation:rise 0.9s cubic-bezier(.2,.7,.2,1) forwards;
-    animation-delay:0.4s;
-  }
-
-  /* the signature moment: two paths crossing and settling, echoing the mark */
-  .cross{
-    width:min(360px, 70vw);
-    height:60px;
-    margin-bottom:44px;
-    opacity:0;
-    animation:rise 0.9s cubic-bezier(.2,.7,.2,1) forwards;
-    animation-delay:0.5s;
-  }
-  .cross svg{ width:100%; height:100%; display:block; }
-  .cross path{
-    fill:none;
-    stroke-width:3;
-    stroke-linecap:round;
-    stroke-dasharray:220;
-    stroke-dashoffset:220;
-    animation:draw 1.6s ease-out forwards;
-    animation-delay:0.9s;
-  }
-  .cross .path-ink{ stroke:var(--ink); }
-  .cross .path-gold{ stroke:var(--gold); animation-delay:1.05s; }
-
-  .pillars{
-    display:flex;
-    gap:0;
-    border-top:1px solid var(--line);
-    border-bottom:1px solid var(--line);
-    opacity:0;
-    animation:rise 0.9s cubic-bezier(.2,.7,.2,1) forwards;
-    animation-delay:0.62s;
-  }
-
-  .pillar{
-    padding:26px 40px;
-    text-align:left;
-  }
-  .pillar + .pillar{
-    border-left:1px solid var(--line);
-  }
-  .pillar .label{
-    font-family:'Fraunces', serif;
-    font-style:italic;
-    font-size:1.15rem;
-    color:var(--ink);
-    margin:0 0 6px;
-  }
-  .pillar .desc{
-    font-size:0.88rem;
-    color:var(--stone);
-    max-width:24ch;
-    line-height:1.5;
-    margin:0;
-  }
-
-  .notify{
-    margin-top:52px;
-    display:flex;
-    gap:10px;
-    width:100%;
-    max-width:400px;
-    opacity:0;
-    animation:rise 0.9s cubic-bezier(.2,.7,.2,1) forwards;
-    animation-delay:0.74s;
-  }
-
-  .notify input[type="email"]{
-    flex:1;
-    padding:13px 16px;
-    border:1px solid var(--line);
-    background:var(--white);
-    border-radius:2px;
-    font-family:'Karla', sans-serif;
-    font-size:0.95rem;
-    color:var(--ink);
-    outline:none;
-    transition:border-color 0.2s ease;
-  }
-  .notify input[type="email"]:focus{
-    border-color:var(--gold-deep);
-  }
-  .notify input[type="email"]::placeholder{
-    color:#9a9385;
-  }
-
-  .notify button{
-    padding:13px 22px;
-    border:none;
-    border-radius:2px;
+  /* ============ SKIP LINK ============ */
+  .skip-link{
+    position:absolute;
+    left:-9999px;
+    top:auto;
     background:var(--ink);
     color:var(--white);
-    font-family:'Karla', sans-serif;
-    font-weight:600;
+    padding:12px 20px;
+    z-index:1000;
+  }
+  .skip-link:focus{
+    left:16px;
+    top:16px;
+  }
+
+  /* ============ NAVIGATION ============ */
+  header.site-nav{
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:rgba(247,242,231,0.86);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .nav-inner{
+    max-width:1180px;
+    margin:0 auto;
+    padding:16px 6vw;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:24px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
+    color:var(--ink);
+  }
+  .brand svg{width:30px;height:30px;flex:none;}
+  .brand span{
+    font-family:'Fraunces', serif;
+    font-size:1.08rem;
+    font-weight:500;
+  }
+
+  /* ============ INTERACTIVE LOGO (nav) ============
+     Works with mouse hover, touch tap, and keyboard focus, not
+     just :hover, since touch devices don't support it. */
+  .brand-mark{ position:relative; }
+  .brand-logo-img{
+    height:38px;
+    width:auto;
+    display:block;
+    transition:transform 0.35s cubic-bezier(.2,.8,.2,1), filter 0.35s ease;
+    will-change:transform;
+    animation:brandLogoIn 0.6s cubic-bezier(.2,.8,.2,1) both;
+    animation-delay:0.1s;
+  }
+  @keyframes brandLogoIn{
+    from{ opacity:0; transform:translateY(4px) scale(0.92); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
+  }
+  .brand-mark:hover .brand-logo-img,
+  .brand-mark:focus-visible .brand-logo-img{
+    transform:scale(1.06);
+    filter:drop-shadow(0 2px 6px rgba(201,151,53,0.35));
+  }
+  /* .is-tapped is toggled briefly via JS on click/touch, so the
+     interaction is visible on mobile where :hover never fires */
+  .brand-mark.is-tapped .brand-logo-img{
+    transform:scale(1.1);
+    filter:drop-shadow(0 2px 8px rgba(201,151,53,0.45));
+  }
+  .brand-mark:focus-visible{outline:2px solid var(--gold-deep);outline-offset:3px;border-radius:4px;}
+  @media (prefers-reduced-motion: reduce){
+    .brand-logo-img{animation:none;transition:none;}
+    .brand-mark:hover .brand-logo-img,
+    .brand-mark:focus-visible .brand-logo-img,
+    .brand-mark.is-tapped .brand-logo-img{ transform:none; filter:none; }
+  }
+
+  nav.primary-links{
+    display:flex;
+    gap:30px;
+    list-style:none;
+    margin:0;
+    padding:0;
+  }
+  nav.primary-links a{
+    text-decoration:none;
+    font-size:0.92rem;
+    color:#3d3b35;
+    position:relative;
+    padding:4px 0;
+    transition:color 0.2s ease;
+  }
+  nav.primary-links a::after{
+    content:"";
+    position:absolute;
+    left:0;right:0;bottom:-2px;
+    height:1px;
+    background:var(--gold-deep);
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:transform 0.25s ease;
+  }
+  nav.primary-links a:hover{color:var(--ink);}
+  nav.primary-links a:hover::after{transform:scaleX(1);}
+  nav.primary-links a.is-current{color:var(--ink);font-weight:600;}
+  nav.primary-links a.is-current::after{transform:scaleX(1);background:var(--gold-deep);}
+  .mobile-drawer nav a.is-current{color:var(--gold-deep);}
+
+  .nav-actions{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:12px 22px;
+    border-radius:2px;
     font-size:0.9rem;
+    font-weight:600;
+    text-decoration:none;
     cursor:pointer;
-    transition:background 0.2s ease;
+    border:1px solid transparent;
+    transition:background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
     white-space:nowrap;
   }
-  .notify button:hover{
-    background:var(--gold-deep);
+  .btn:active{transform:translateY(1px);}
+  .btn-solid{background:var(--ink);color:var(--white);}
+  .btn-solid:hover{background:var(--gold-deep);}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line);}
+  .btn-ghost:hover{border-color:var(--gold-deep);color:var(--gold-deep);}
+  .nav-store-btn{padding:10px 18px;font-size:0.85rem;}
+  @media (max-width:980px){
+    /* The mobile drawer's "Explore Bathopedi" list already links to
+       Stores, so the header button is hidden rather than duplicated. */
+    .nav-store-btn{display:none;}
   }
-  .notify button:focus-visible,
-  .notify input:focus-visible{
-    outline:2px solid var(--gold-deep);
-    outline-offset:2px;
-  }
+  .btn-gold{background:var(--gold);color:var(--ink);}
+  .btn-gold:hover{background:var(--gold-deep);color:var(--white);}
+  .btn:focus-visible{outline:2px solid var(--gold-deep);outline-offset:2px;}
 
-  .confirm{
-    margin-top:14px;
-    font-size:0.85rem;
-    color:var(--gold-deep);
+  .ecosystem-toggle{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:38px;height:38px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:transparent;
+    cursor:pointer;
+    transition:border-color 0.2s ease;
+  }
+  .ecosystem-toggle:hover,
+  .ecosystem-toggle:active{border-color:var(--gold-deep);}
+  .ecosystem-toggle svg{width:16px;height:16px;}
+
+  .mobile-menu-btn{
     display:none;
+    width:38px;height:38px;
+    border:1px solid var(--line);
+    border-radius:50%;
+    background:transparent;
+    cursor:pointer;
+    position:relative;
   }
-  .confirm.show{ display:block; }
+  .mobile-menu-btn span, .mobile-menu-btn span::before, .mobile-menu-btn span::after{
+    content:"";
+    position:absolute;
+    left:11px;right:11px;
+    height:1px;
+    background:var(--ink);
+  }
+  .mobile-menu-btn span{top:18px;}
+  .mobile-menu-btn span::before{top:-6px;}
+  .mobile-menu-btn span::after{top:6px;}
 
-  footer{
+  /* ============ MOBILE DRAWER ============ */
+  .mobile-drawer{
+    position:fixed;
+    inset:0;
+    z-index:200;
+    background:var(--cream);
+    display:flex;
+    flex-direction:column;
+    padding:20px 6vw 40px;
+    transform:translateX(100%);
+    transition:transform 0.35s cubic-bezier(.2,.7,.2,1);
+    overflow-y:auto;
+  }
+  .mobile-drawer.open{transform:translateX(0);}
+  .mobile-drawer-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:40px;
+  }
+  .mobile-drawer nav{
+    display:flex;
+    flex-direction:column;
+    gap:0;
+  }
+  .mobile-drawer nav a{
+    text-decoration:none;
+    color:var(--ink);
+    font-family:'Fraunces', serif;
+    font-size:1.6rem;
+    padding:16px 0;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .mobile-drawer .sub-block{margin-top:36px;}
+  .mobile-drawer .sub-block h3{
+    font-family:'Karla', sans-serif;
+    font-size:0.78rem;
+    letter-spacing:0.08em;
+    color:var(--stone);
+    margin-bottom:14px;
+    font-weight:600;
+  }
+  .mobile-drawer .sub-block a{
+    display:flex;
+    justify-content:space-between;
+    font-family:'Karla', sans-serif;
+    font-size:1rem;
+    padding:12px 0;
+    border-bottom:1px solid var(--line-soft);
+    color:#3d3b35;
+    text-decoration:none;
+  }
+  .tag-soon{
+    font-size:0.7rem;
+    color:var(--stone);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:2px 9px;
+  }
+
+  /* ============ HERO ============ */
+  .hero{
     position:relative;
     z-index:1;
-    padding:26px 6vw 34px;
-    text-align:center;
-    font-size:0.78rem;
-    color:#9a9385;
-    letter-spacing:0.02em;
+    padding:70px 0 90px;
   }
-
-  @keyframes rise{
-    to{ opacity:1; transform:translateY(0); }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr 0.95fr;
+    gap:60px;
+    align-items:center;
   }
-  @keyframes draw{
-    to{ stroke-dashoffset:0; }
+  .hero-eyebrow{
+    font-size:0.82rem;
+    letter-spacing:0.1em;
+    color:var(--stone);
+    margin:0 0 20px;
+  }
+  .hero h1{
+    font-size:clamp(2.5rem, 4.6vw, 3.9rem);
+    line-height:1.08;
+    max-width:13ch;
+    margin-bottom:26px;
+  }
+  .hero-lede{
+    font-size:1.1rem;
+    line-height:1.7;
+    color:#3d3b35;
+    max-width:46ch;
+    margin-bottom:38px;
+  }
+  .hero-ctas{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .hero-visual{
+    position:relative;
+    aspect-ratio:1/1;
+    max-width:460px;
+    margin:0 auto;
+    border-radius:6px;
+    overflow:hidden;
+    box-shadow:0 24px 48px -24px rgba(23,23,26,0.28);
+  }
+  .hero-photo{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center 30%;
+    opacity:0;
+    transform:scale(1.06);
+    animation:heroPhotoIn 0.9s cubic-bezier(.2,.7,.2,1) forwards;
+    animation-delay:0.2s;
+  }
+  @keyframes heroPhotoIn{
+    to{ opacity:1; transform:scale(1); }
   }
 
   @media (prefers-reduced-motion: reduce){
-    .logo,.eyebrow,h1,.lede,.cross,.pillars,.notify{
+    .hero-photo{
       animation:none !important;
       opacity:1 !important;
       transform:none !important;
     }
-    .cross path{
-      animation:none !important;
-      stroke-dashoffset:0 !important;
-    }
   }
 
+  /* ============ SECTION SCAFFOLDING ============ */
+  section{
+    position:relative;
+    z-index:1;
+    padding:90px 0;
+  }
+  .section-tight{padding:60px 0;}
+  .section-rule-top{border-top:1px solid var(--line);}
+  .kicker{
+    font-size:0.82rem;
+    letter-spacing:0.06em;
+    color:var(--gold-deep);
+    margin-bottom:14px;
+  }
+  .section-head{
+    max-width:640px;
+    margin-bottom:56px;
+  }
+  .section-head h2{
+    font-size:clamp(1.8rem, 3.2vw, 2.5rem);
+    line-height:1.16;
+    margin-bottom:18px;
+  }
+  .section-head p{
+    font-size:1.02rem;
+    line-height:1.7;
+    color:#3d3b35;
+  }
+  [data-reveal]{
+    opacity:0;
+    transform:translateY(16px);
+    transition:opacity 0.7s cubic-bezier(.2,.7,.2,1), transform 0.7s cubic-bezier(.2,.7,.2,1);
+  }
+  [data-reveal].in-view{
+    opacity:1;
+    transform:translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce){
+    [data-reveal]{opacity:1;transform:none;transition:none;}
+  }
+
+  /* ============ PILLARS ============ */
+  .pillars-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .pillar-item{
+    padding:44px 36px;
+    border-left:1px solid var(--line);
+    transition:background 0.4s ease;
+  }
+  .pillar-item:first-child{border-left:none;}
+  .pillar-item:hover, .pillar-item:focus-within{
+    background:rgba(201,151,53,0.05);
+  }
+  .pillar-badge{
+    width:64px;height:64px;
+    border-radius:50%;
+    background:var(--white);
+    border:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:22px;
+    transition:transform 0.4s cubic-bezier(.2,.7,.2,1), border-color 0.4s ease;
+  }
+  .pillar-item:hover .pillar-badge,
+  .pillar-item:active .pillar-badge{
+    transform:translateY(-3px) scale(1.06);
+    border-color:var(--gold);
+  }
+  .pillar-mark{
+    width:28px;height:28px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .pillar-item:hover .pillar-badge,
+    .pillar-item:active .pillar-badge{ transform:none; }
+  }
+  .pillar-item h3{
+    font-size:1.3rem;
+    font-style:italic;
+    margin-bottom:10px;
+  }
+  .pillar-item p{
+    color:var(--stone);
+    font-size:0.95rem;
+    line-height:1.65;
+    max-width:30ch;
+  }
+
+  /* ============ HUMAN DEV ============ */
+  .human-dev{
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    gap:60px;
+    align-items:center;
+  }
+  .human-dev-image{
+    border-radius:6px;
+    overflow:hidden;
+    box-shadow:0 20px 40px -22px rgba(23,23,26,0.25);
+  }
+  .human-dev-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .human-dev h2{
+    font-size:clamp(1.9rem, 3.4vw, 2.7rem);
+    line-height:1.18;
+    max-width:12ch;
+  }
+  .human-dev-copy p{
+    font-size:1.02rem;
+    line-height:1.75;
+    color:#3d3b35;
+    margin-bottom:20px;
+  }
+  .human-dev-list{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px 24px;
+    margin-top:28px;
+    list-style:none;
+    padding:0;
+  }
+  .human-dev-list li{
+    font-size:0.92rem;
+    color:var(--ink);
+    padding:9px 0;
+    border-bottom:1px solid var(--line-soft);
+  }
+
+  /* ============ MARRIAGE / FAMILY ============ */
+  .family-section{
+    background:var(--white);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .family-cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:var(--line);
+    margin-top:10px;
+  }
+  .family-card{
+    background:var(--white);
+    padding:32px 26px;
+  }
+  .family-card h3{
+    font-size:1.08rem;
+    font-family:'Karla', sans-serif;
+    font-weight:600;
+    margin-bottom:10px;
+  }
+  .family-card p{
+    font-size:0.9rem;
+    color:var(--stone);
+    line-height:1.6;
+  }
+  .family-note{
+    margin-top:26px;
+    font-size:0.85rem;
+    color:var(--stone);
+    max-width:60ch;
+    font-style:italic;
+  }
+
+  /* ============ PROGRAMMES ============ */
+  .programme-list{
+    display:flex;
+    flex-direction:column;
+  }
+  .programme-row{
+    display:grid;
+    grid-template-columns:60px 1fr 1.4fr auto;
+    align-items:center;
+    gap:24px;
+    padding:26px 0;
+    border-bottom:1px solid var(--line);
+    text-decoration:none;
+    color:inherit;
+  }
+  .programme-row:first-child{border-top:1px solid var(--line);}
+  .programme-idx{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    color:var(--gold-deep);
+    font-size:1.05rem;
+  }
+  .programme-row h3{
+    font-size:1.15rem;
+    font-family:'Fraunces', serif;
+    font-weight:500;
+  }
+  .programme-row p{
+    font-size:0.92rem;
+    color:var(--stone);
+    line-height:1.55;
+  }
+  .programme-arrow{
+    width:34px;height:34px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:border-color 0.2s ease, transform 0.2s ease;
+    flex:none;
+  }
+  .programme-row:hover .programme-arrow,
+  .programme-row:active .programme-arrow{
+    border-color:var(--gold-deep);
+    transform:translateX(4px);
+  }
+  .programme-arrow svg{width:14px;height:14px;}
+
+  /* ============ IMPACT ============ */
+  .impact-section{
+    background:var(--ink);
+    color:var(--cream);
+  }
+  .impact-section .kicker{color:var(--gold);}
+  .impact-section .section-head p{color:#c9c5b8;}
+  .impact-section .section-head h2{color:var(--white);}
+  .impact-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:rgba(247,242,231,0.14);
+  }
+  .impact-item{
+    background:var(--ink);
+    padding:36px 20px;
+    text-align:left;
+  }
+  .impact-number{
+    font-family:'Fraunces', serif;
+    font-size:2.6rem;
+    color:var(--gold);
+    line-height:1;
+    margin-bottom:10px;
+  }
+  .impact-label{
+    font-size:0.9rem;
+    color:#c9c5b8;
+  }
+  .impact-placeholder-note{
+    font-size:0.72rem;
+    color:#8f8b7d;
+    margin-top:8px;
+    font-style:italic;
+  }
+
+  /* ============ STORIES ============ */
+  .stories-flag{
+    display:inline-block;
+    font-size:0.72rem;
+    color:var(--stone);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:3px 12px;
+    margin-bottom:34px;
+  }
+  .story-mosaic{
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:2px;
+  }
+  .story-tile{
+    background:linear-gradient(135deg, rgba(201,151,53,0.16), rgba(23,23,26,0.08));
+    padding:40px 32px;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    min-height:260px;
+    position:relative;
+  }
+  .story-tile:nth-child(1){min-height:420px;}
+  .story-tile p.story-quote{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:1.3rem;
+    line-height:1.4;
+    color:var(--ink);
+    max-width:26ch;
+  }
+  .story-tile span.story-tag{
+    font-size:0.78rem;
+    color:var(--stone);
+    margin-top:14px;
+    display:block;
+  }
+
+  /* ============ GALLERY ============ */
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:2px;
+  }
+  .gallery-tile{
+    aspect-ratio:1/1;
+    background:var(--white);
+    border:1px solid var(--line-soft);
+    display:block;
+    position:relative;
+    overflow:hidden;
+  }
+  .gallery-tile img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:transform 0.5s cubic-bezier(.2,.7,.2,1);
+  }
+  .gallery-tile:hover img,
+  .gallery-tile:active img{
+    transform:scale(1.06);
+  }
+  .gallery-tile span{
+    position:absolute;
+    left:0;right:0;bottom:0;
+    padding:10px 14px;
+    font-size:0.78rem;
+    color:var(--white);
+    background:linear-gradient(0deg, rgba(23,23,26,0.72), transparent);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .gallery-tile img{transition:none;}
+    .gallery-tile:hover img,.gallery-tile:active img{transform:none;}
+  }
+
+  /* ============ ECOSYSTEM CHOOSER (expanding cards + disclosure) ============ */
+  .eco-chooser-section{
+    background:var(--white);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .eco-chooser{
+    max-width:720px;
+  }
+  .eco-chips{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:12px;
+  }
+  .eco-chip{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    height:128px;
+    padding:18px 18px 16px;
+    border-radius:20px;
+    border:none;
+    cursor:pointer;
+    color:var(--white);
+    text-align:left;
+    font-family:'Karla', sans-serif;
+    box-shadow:0 10px 24px -14px rgba(23,23,26,0.35);
+    transition:transform 0.35s cubic-bezier(.34,1.3,.4,1), box-shadow 0.3s ease, opacity 0.3s ease;
+  }
+  .eco-chip:hover,
+  .eco-chip:active{transform:translateY(-3px);}
+  .eco-chip:focus-visible{outline:2px solid var(--gold-deep);outline-offset:3px;}
+  .eco-chip[data-eco="foundation"]{background:var(--ink);}
+  .eco-chip[data-eco="stores"]{background:var(--gold-deep);}
+  .eco-chip[data-eco="chats"]{background:var(--moss);}
+  .eco-chip.is-active{transform:scale(0.97);opacity:0.75;}
+  .eco-chip-icon{width:30px;height:30px;opacity:0.92;}
+  .eco-chip-icon svg{width:100%;height:100%;}
+  .eco-chip-title{font-family:'Fraunces', serif;font-size:1.15rem;margin-bottom:2px;}
+  .eco-chip-status{font-size:0.8rem;opacity:0.72;}
+
+  .eco-expanded-wrap{
+    display:grid;
+    grid-template-rows:0fr;
+    transition:grid-template-rows 0.5s cubic-bezier(.3,1,.4,1);
+    margin-top:0;
+  }
+  .eco-expanded-wrap.open{
+    grid-template-rows:1fr;
+    margin-top:16px;
+  }
+  .eco-expanded-wrap > div{overflow:hidden;}
+
+  .eco-expanded{
+    border-radius:22px;
+    padding:26px 26px 20px;
+    color:var(--white);
+    opacity:0;
+    transform:translateY(-8px) scale(0.98);
+    transition:opacity 0.35s ease 0.1s, transform 0.4s cubic-bezier(.3,1,.4,1) 0.1s;
+  }
+  .eco-expanded-wrap.open .eco-expanded{opacity:1;transform:translateY(0) scale(1);}
+  .eco-expanded[data-eco="foundation"]{background:var(--ink);}
+  .eco-expanded[data-eco="stores"]{background:var(--gold-deep);}
+  .eco-expanded[data-eco="chats"]{background:var(--moss);}
+
+  .eco-expanded-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+  }
+  .eco-icon-badge{
+    width:42px;height:42px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .eco-icon-badge svg{width:100%;height:100%;}
+  .eco-close{
+    width:30px;height:30px;
+    border-radius:50%;
+    border:none;
+    background:rgba(255,255,255,0.14);
+    color:var(--white);
+    font-size:1rem;
+    line-height:1;
+    cursor:pointer;
+  }
+  .eco-close:hover{background:rgba(255,255,255,0.26);}
+
+  .eco-expanded-body{margin:16px 0 18px;}
+  .eco-expanded-body h3{font-family:'Fraunces', serif;font-size:1.5rem;color:var(--white);margin-bottom:4px;}
+  .eco-expanded-body p{font-size:0.92rem;color:rgba(255,255,255,0.7);}
+
+  .eco-disclosure-trigger{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:13px 4px;
+    background:transparent;
+    border:none;
+    border-top:1px solid rgba(255,255,255,0.16);
+    color:var(--white);
+    font-family:'Karla', sans-serif;
+    font-size:0.92rem;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .eco-disclosure-trigger .chevron{
+    width:16px;height:16px;
+    transition:transform 0.3s ease;
+    flex:none;
+  }
+  .eco-disclosure-trigger[aria-expanded="true"] .chevron{transform:rotate(180deg);}
+
+  .eco-disclosure-panel{
+    display:grid;
+    grid-template-rows:0fr;
+    transition:grid-template-rows 0.4s cubic-bezier(.3,1,.4,1);
+  }
+  .eco-disclosure-panel.open{grid-template-rows:1fr;}
+  .eco-disclosure-panel > div{overflow:hidden;}
+  .eco-disclosure-inner{padding-top:4px;}
+
+  .eco-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:11px 4px;
+    border-top:1px solid rgba(255,255,255,0.1);
+    text-decoration:none;
+    color:var(--white);
+  }
+  .eco-row.is-link:hover{background:rgba(255,255,255,0.06);}
+  .eco-row-icon{
+    width:30px;height:30px;
+    flex:none;
+    border-radius:9px;
+    background:rgba(255,255,255,0.12);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .eco-row-icon svg{width:15px;height:15px;}
+  .eco-row-text strong{display:block;font-size:0.9rem;font-weight:600;}
+  .eco-row-text small{display:block;font-size:0.78rem;color:rgba(255,255,255,0.62);}
+  .eco-row-tag{
+    margin-left:auto;
+    font-size:0.7rem;
+    color:rgba(255,255,255,0.55);
+    white-space:nowrap;
+  }
+
+  .eco-notify{
+    display:flex;
+    gap:8px;
+    margin-top:14px;
+  }
+  .eco-notify input{
+    flex:1;
+    padding:11px 14px;
+    border:1px solid rgba(255,255,255,0.24);
+    background:rgba(255,255,255,0.06);
+    color:var(--white);
+    border-radius:10px;
+    font-family:'Karla', sans-serif;
+    font-size:0.88rem;
+  }
+  .eco-notify input::placeholder{color:rgba(255,255,255,0.5);}
+  .eco-notify button{
+    padding:11px 18px;
+    border:none;
+    background:var(--white);
+    color:var(--ink);
+    font-weight:700;
+    font-size:0.85rem;
+    border-radius:10px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .eco-notify button:hover{background:var(--cream);}
+
+  @media (prefers-reduced-motion: reduce){
+    .eco-chip, .eco-expanded, .eco-expanded-wrap, .eco-disclosure-panel, .eco-disclosure-trigger .chevron{
+      transition:none !important;
+    }
+  }
+  @media (max-width:640px){
+    .eco-chips{grid-template-columns:1fr 1fr 1fr;gap:8px;}
+    .eco-chip{height:120px;padding:14px;}
+    .eco-chip-title{font-size:1rem;}
+  }
+  @media (max-width:420px){
+    /* Three columns get too cramped on small phones, so drop to two
+       so each chip keeps enough breathing room for its label. */
+    .eco-chips{grid-template-columns:1fr 1fr;}
+    .eco-chip{height:110px;}
+  }
+
+  /* ============ FINAL CTA ============ */
+  .final-cta{
+    text-align:left;
+    border-top:1px solid var(--line);
+  }
+  .final-cta h2{
+    font-size:clamp(2.2rem, 4vw, 3.2rem);
+    max-width:16ch;
+    margin-bottom:22px;
+  }
+  .final-cta p{
+    font-size:1.05rem;
+    color:#3d3b35;
+    max-width:55ch;
+    line-height:1.7;
+    margin-bottom:36px;
+  }
+  .final-cta-btns{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+
+  /* ============ FOOTER ============ */
+  footer.site-footer{
+    background:var(--ink);
+    color:#c9c5b8;
+    padding:70px 0 30px;
+    position:relative;
+    z-index:1;
+  }
+  .footer-top{
+    display:grid;
+    grid-template-columns:1.3fr repeat(4, 1fr);
+    gap:40px;
+    padding-bottom:50px;
+    border-bottom:1px solid rgba(247,242,231,0.12);
+  }
+  .footer-brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:16px;
+  }
+  .footer-brand svg{width:28px;height:28px;}
+  .footer-brand span{
+    font-family:'Fraunces', serif;
+    color:var(--white);
+    font-size:1.05rem;
+  }
+  /* Footer background is dark ink, and the logo's own black elements
+     would disappear against it, so a small light badge keeps the real
+     artwork's colours intact rather than altering the logo itself. */
+  .footer-logo-badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--cream);
+    border-radius:8px;
+    padding:5px;
+    flex:none;
+  }
+  .footer-logo-img{height:30px;width:auto;display:block;}
+  .drawer-logo-img{height:34px;width:auto;display:block;}
+  .footer-mission{
+    font-size:0.92rem;
+    line-height:1.6;
+    max-width:32ch;
+    color:#a9a596;
+  }
+  .footer-col h4{
+    font-size:0.78rem;
+    letter-spacing:0.06em;
+    color:#a9a596;
+    margin-bottom:16px;
+    font-weight:600;
+  }
+  .footer-col ul{list-style:none;padding:0;margin:0;}
+  .footer-col li{margin-bottom:11px;}
+  .footer-col a{
+    text-decoration:none;
+    color:#c9c5b8;
+    font-size:0.92rem;
+    transition:color 0.2s ease;
+  }
+  .footer-col a:hover{color:var(--gold);}
+  .footer-col .soon{color:#726e60;}
+  .newsletter{
+    display:flex;
+    gap:8px;
+    margin-top:16px;
+  }
+  .newsletter input{
+    flex:1;
+    padding:11px 14px;
+    border:1px solid rgba(247,242,231,0.22);
+    background:transparent;
+    color:var(--white);
+    border-radius:2px;
+    font-family:'Karla', sans-serif;
+    font-size:0.88rem;
+  }
+  .newsletter input::placeholder{color:#726e60;}
+  .newsletter button{
+    padding:11px 16px;
+    border:none;
+    background:var(--gold);
+    color:var(--ink);
+    font-weight:600;
+    font-size:0.85rem;
+    border-radius:2px;
+    cursor:pointer;
+  }
+  .newsletter button:hover{background:var(--gold-deep);color:var(--white);}
+  .footer-bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding-top:26px;
+    font-size:0.8rem;
+    color:#726e60;
+    flex-wrap:wrap;
+    gap:14px;
+  }
+  .footer-bottom-links{display:flex;gap:20px;list-style:none;padding:0;margin:0;}
+  .footer-bottom-links a{color:#a9a596;text-decoration:none;font-size:0.8rem;}
+  .footer-bottom-links a:hover{color:var(--gold);}
+
+  /* ============ ECOSYSTEM SWITCHER OVERLAY ============ */
+  .ecosystem-overlay{
+    position:fixed;
+    inset:0;
+    z-index:300;
+    background:rgba(23,23,26,0.92);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    visibility:hidden;
+    transition:opacity 0.3s ease;
+    padding:6vw;
+  }
+  .ecosystem-overlay.open{opacity:1;visibility:visible;}
+  .ecosystem-panel{
+    max-width:960px;
+    width:100%;
+  }
+  .ecosystem-panel-head{
+    text-align:center;
+    margin-bottom:48px;
+  }
+  .ecosystem-panel-head p.eyebrow{
+    color:var(--gold);
+    font-size:0.82rem;
+    letter-spacing:0.08em;
+    margin-bottom:12px;
+  }
+  .ecosystem-panel-head h2{
+    color:var(--white);
+    font-size:clamp(1.8rem,3.4vw,2.6rem);
+  }
+  .ecosystem-options{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:rgba(247,242,231,0.14);
+  }
+  .eco-option{
+    background:#1d1d21;
+    padding:38px 26px;
+    text-decoration:none;
+    color:var(--cream);
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    transition:background 0.25s ease, transform 0.25s ease;
+    position:relative;
+  }
+  .eco-option:hover,
+  .eco-option:active{background:#26262b;transform:translateY(-4px);}
+  .eco-option h3{
+    font-family:'Fraunces', serif;
+    font-size:1.4rem;
+    color:var(--white);
+  }
+  .eco-option .eco-tags{
+    font-size:0.78rem;
+    color:var(--gold);
+    letter-spacing:0.03em;
+  }
+  .eco-option .eco-desc{
+    font-size:0.9rem;
+    color:#a9a596;
+    line-height:1.55;
+  }
+  .eco-status{
+    font-size:0.72rem;
+    color:#726e60;
+    margin-top:auto;
+    padding-top:14px;
+    border-top:1px solid rgba(247,242,231,0.1);
+  }
+  .eco-status.active{color:var(--gold);}
+  .ecosystem-close{
+    position:absolute;
+    top:28px;right:28px;
+    width:38px;height:38px;
+    border-radius:50%;
+    border:1px solid rgba(247,242,231,0.3);
+    background:transparent;
+    color:var(--white);
+    cursor:pointer;
+    font-size:1.1rem;
+  }
+
+  /* ============ MOBILE STICKY CTA ============ */
+  .sticky-cta{
+    display:none;
+    position:fixed;
+    bottom:0;left:0;right:0;
+    z-index:150;
+    padding:12px 16px;
+    background:rgba(247,242,231,0.94);
+    backdrop-filter:blur(8px);
+    border-top:1px solid var(--line);
+  }
+  .sticky-cta a{
+    display:block;
+    text-align:center;
+    padding:14px;
+    background:var(--ink);
+    color:var(--white);
+    border-radius:2px;
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.95rem;
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 980px){
+    nav.primary-links{display:none;}
+    .mobile-menu-btn{display:block;}
+    .hero-grid{grid-template-columns:1fr;gap:40px;}
+    .hero-visual{order:-1;max-width:320px;}
+    .hero h1{max-width:none;}
+    .pillars-grid{grid-template-columns:1fr;}
+    .pillar-item{border-left:none;border-top:1px solid var(--line);}
+    .pillar-item:first-child{border-top:none;}
+    .human-dev{grid-template-columns:1fr;gap:36px;}
+    .human-dev-list{grid-template-columns:1fr;}
+    .family-cards{grid-template-columns:1fr 1fr;}
+    .impact-grid{grid-template-columns:1fr 1fr;}
+    .story-mosaic{grid-template-columns:1fr;}
+    .story-tile:nth-child(1){min-height:280px;}
+    .gallery-grid{grid-template-columns:1fr 1fr;}
+    .programme-row{grid-template-columns:36px 1fr auto;}
+    .programme-row p{display:none;}
+    .footer-top{grid-template-columns:1fr 1fr;gap:36px;}
+    .ecosystem-options{grid-template-columns:1fr;}
+    .sticky-cta{display:block;}
+    body{padding-bottom:64px;}
+    .footer-bottom{flex-direction:column;align-items:flex-start;}
+  }
   @media (max-width: 560px){
-    .pillars{ flex-direction:column; }
-    .pillar + .pillar{ border-left:none; border-top:1px solid var(--line); }
-    .notify{ flex-direction:column; }
+    .family-cards{grid-template-columns:1fr;}
+    .footer-top{grid-template-columns:1fr;}
   }
 </style>
 </head>
 <body>
 
-  <div class="backdrop"></div>
-
-  <div class="wrap">
-    <img class="logo" src="logo.png" alt="Bathopedi Initiative logo">
-
-    <p class="eyebrow">Bathopedi Initiative</p>
-
-    <h1>Building toward <em>Bathopedi</em>, together.</h1>
-
-    <p class="lede">
-      A home for economic upliftment and spiritual growth in our community.
-      We're laying the foundation — the site is on its way.
-    </p>
-
-    <div class="cross" aria-hidden="true">
-      <svg viewBox="0 0 360 60" xmlns="http://www.w3.org/2000/svg">
-        <path class="path-ink" d="M10,50 C110,50 150,10 180,10"></path>
-        <path class="path-gold" d="M350,50 C250,50 210,10 180,10"></path>
-      </svg>
-    </div>
-
-    <div class="pillars">
-      <div class="pillar">
-        <p class="label">Economy</p>
-        <p class="desc">Practical support and opportunity for families to build sustainable livelihoods.</p>
-      </div>
-      <div class="pillar">
-        <p class="label">Spiritual Growth</p>
-        <p class="desc">Space to grow in faith and character, rooted in service to one another.</p>
-      </div>
-    </div>
-
-    <form class="notify" id="notifyForm">
-      <input type="email" id="emailInput" placeholder="Your email address" required aria-label="Email address">
-      <button type="submit">Notify me</button>
-    </form>
-    <p class="confirm" id="confirmMsg">Thank you — we'll let you know when we launch.</p>
+<div id="entranceReveal" class="entrance-reveal" aria-hidden="true">
+  <div class="entrance-inner">
+    <img src="logo-square.png" alt="" class="entrance-logo">
+    <p class="entrance-name">Bathopedi Initiative</p>
+    <p class="entrance-tagline">Growing People. Strengthening Families.</p>
   </div>
+</div>
+<script>
+  // Runs immediately (before paint) so repeat visitors within this
+  // browser session never see the splash flash up at all.
+  try{
+    if(sessionStorage.getItem('bathopediEntranceSeen')){
+      document.getElementById('entranceReveal').style.display = 'none';
+    } else {
+      sessionStorage.setItem('bathopediEntranceSeen', '1');
+    }
+  }catch(e){ /* sessionStorage unavailable (e.g. private mode) — fine, it just plays once as normal */ }
+</script>
 
-  <footer>&copy; 2026 Bathopedi Initiative. Site launching soon.</footer>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="backdrop" aria-hidden="true"></div>
+<div class="noise" aria-hidden="true"></div>
 
-  <script>
-    document.getElementById('notifyForm').addEventListener('submit', function(e){
-      e.preventDefault();
-      var input = document.getElementById('emailInput');
-      var confirm = document.getElementById('confirmMsg');
-      if(input.checkValidity()){
-        confirm.classList.add('show');
+<!-- ============ NAV ============ -->
+<header class="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand brand-mark" id="navBrand" aria-label="Go to the Bathopedi Initiative homepage" title="Bathopedi Initiative home">
+      <img src="logo.png" alt="Bathopedi Initiative" class="brand-logo-img">
+    </a>
+    <nav class="primary-links" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Our Work</a>
+      <a href="impact.html">Impact</a>
+      <a href="get-involved.html">Get Involved</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="stores-coming-soon.html" class="btn btn-ghost nav-store-btn">Store</a>
+      <a href="get-involved.html#support" class="btn btn-solid">Get support</a>
+      <button class="ecosystem-toggle" id="ecosystemOpen" aria-haspopup="dialog" aria-expanded="false" aria-controls="ecosystemOverlay" title="Explore the Bathopedi ecosystem">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="6" r="2" stroke="#17171a" stroke-width="1.6"/>
+          <circle cx="6" cy="17" r="2" stroke="#17171a" stroke-width="1.6"/>
+          <circle cx="18" cy="17" r="2" stroke="#17171a" stroke-width="1.6"/>
+          <path d="M12 8L7.5 15.3M12 8L16.5 15.3" stroke="#17171a" stroke-width="1.2"/>
+        </svg>
+      </button>
+      <button class="mobile-menu-btn" id="mobileMenuOpen" aria-haspopup="dialog" aria-expanded="false" aria-controls="mobileDrawer" aria-label="Open menu"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ MOBILE DRAWER ============ -->
+<div class="mobile-drawer" id="mobileDrawer" role="dialog" aria-modal="true" aria-label="Site menu">
+  <div class="mobile-drawer-top">
+    <span class="brand"><img src="logo.png" alt="Bathopedi Initiative" class="brand-logo-img drawer-logo-img"></span>
+    <button class="mobile-menu-btn" id="mobileMenuClose" aria-label="Close menu" style="transform:rotate(45deg);"><span></span></button>
+  </div>
+  <nav aria-label="Mobile primary">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="services.html">Our Work</a>
+    <a href="impact.html">Impact</a>
+    <a href="get-involved.html">Get Involved</a>
+    <a href="get-involved.html#support">Get Support</a>
+  </nav>
+  <div class="sub-block">
+    <h3>Explore Bathopedi</h3>
+    <a href="index.html">Foundation <span class="tag-soon" style="color:var(--gold-deep);border-color:var(--gold-deep);">Active</span></a>
+    <a href="stores-coming-soon.html">Stores <span class="tag-soon">Coming soon</span></a>
+    <a href="chats-coming-soon.html">Chats <span class="tag-soon">Coming soon</span></a>
+  </div>
+</div>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <p class="hero-eyebrow">Bathopedi Initiative</p>
+        <h1>Growing people.<br>Strengthening families.<br>Building communities.</h1>
+        <p class="hero-lede">Bathopedi Initiative helps people build better lives through economic opportunity, honest counselling, and a community that walks with families rather than past them.</p>
+        <div class="hero-ctas">
+          <a href="services.html" class="btn btn-solid">Explore our work</a>
+          <a href="get-involved.html#support" class="btn btn-ghost">Get support</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <img class="hero-photo" src="community-unity-hillside.jpg" alt="Bathopedi Initiative community members joining hands together during an outreach visit, with Bathopedi banners standing on either side" width="900" height="900">
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PILLARS ============ -->
+  <section class="section-tight" data-reveal>
+    <div class="container">
+      <div class="pillars-grid">
+        <div class="pillar-item">
+          <div class="pillar-badge"><svg class="pillar-mark" viewBox="0 0 44 44" fill="none" aria-hidden="true"><circle cx="16" cy="22" r="11" stroke="#17171a" stroke-width="1.4"/><circle cx="28" cy="22" r="11" stroke="#c99735" stroke-width="1.4"/></svg></div>
+          <h3>Economy</h3>
+          <p>Creating pathways to opportunity, enterprise and sustainable livelihoods.</p>
+        </div>
+        <div class="pillar-item">
+          <div class="pillar-badge"><svg class="pillar-mark" viewBox="0 0 44 44" fill="none" aria-hidden="true"><circle cx="22" cy="22" r="3" fill="#c99735"/><path d="M22 4V14M22 30V40M4 22H14M30 22H40M9 9L16 16M28 28L35 35M35 9L28 16M16 28L9 35" stroke="#17171a" stroke-width="1.2"/></svg></div>
+          <h3>Spiritual</h3>
+          <p>Encouraging purpose, character, compassion and meaningful connection.</p>
+        </div>
+        <div class="pillar-item">
+          <div class="pillar-badge"><svg class="pillar-mark" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M6 36H38M12 36V26M20 36V18M28 36V10M36 36V22" stroke="#565f45" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <h3>Growth</h3>
+          <p>Supporting people and families as they navigate relationships, challenges and personal development.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HUMAN DEVELOPMENT ============ -->
+  <section data-reveal>
+    <div class="container human-dev">
+      <div class="human-dev-text">
+        <h2>People are more than their problems.</h2>
+        <div class="human-dev-copy">
+          <p>Most people don't need to be fixed. They need somewhere to be heard, a way forward, and people who stay long enough to see it through. That's the posture Bathopedi tries to hold: practical, patient, and honest about what help actually looks like.</p>
+          <p>A single difficulty rarely arrives alone. Money pressure strains a marriage. A strained marriage affects the children. So we work across the whole picture (support, guidance, opportunity, connection, counselling, mentorship) rather than treating one symptom in isolation.</p>
+          <ul class="human-dev-list">
+            <li>Support and guidance</li>
+            <li>Opportunity and mentorship</li>
+            <li>Connection and community</li>
+            <li>Counselling and referral</li>
+          </ul>
+        </div>
+      </div>
+      <div class="human-dev-image">
+        <img src="story-couple-editorial.jpg" alt="A couple laughing together beside Bathopedi Initiative banners during a home visit" loading="lazy" width="800" height="1000">
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MARRIAGE & FAMILY ============ -->
+  <section class="family-section" data-reveal>
+    <div class="container">
+      <div class="section-head" style="margin-bottom:10px;">
+        <p class="kicker">Relationships &amp; family</p>
+        <h2>Strong relationships don't happen by accident.</h2>
+        <p>Bathopedi provides a safe, unhurried space where individuals and couples can seek guidance, whether they're preparing for marriage, working through a hard season, or trying to rebuild something that broke.</p>
+      </div>
+      <div class="family-cards">
+        <div class="family-card">
+          <h3>Pre-marriage</h3>
+          <p>Preparing couples for marriage, communication and shared purpose before the wedding day.</p>
+        </div>
+        <div class="family-card">
+          <h3>Marriage support</h3>
+          <p>Helping couples navigate communication, conflict and difficult seasons together.</p>
+        </div>
+        <div class="family-card">
+          <h3>Family support</h3>
+          <p>Helping families build healthier patterns of communication and connection at home.</p>
+        </div>
+        <div class="family-card">
+          <h3>Relationship growth</h3>
+          <p>Helping individuals understand themselves and how they relate to the people around them.</p>
+        </div>
+      </div>
+      <p class="family-note">Professional support and referral services may be available depending on the situation. Please don't include highly confidential medical or personal information when first reaching out.</p>
+      <div style="margin-top:28px;">
+        <a href="services.html#counselling" class="btn btn-ghost">Explore counselling</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROGRAMMES ============ -->
+  <section data-reveal>
+    <div class="container">
+      <div class="section-head">
+        <p class="kicker">Our programmes</p>
+        <h2>Ways we walk alongside people.</h2>
+        <p>Every programme sits under one of Bathopedi's pillars: economy, spiritual growth, or personal and family growth.</p>
+      </div>
+      <div class="programme-list">
+        <a class="programme-row" href="services.html#marriage">
+          <span class="programme-idx">01</span>
+          <h3>Marriage &amp; couples support</h3>
+          <p>Guidance for couples at every stage, from engagement to long-term partnership.</p>
+          <span class="programme-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="#17171a" stroke-width="1.6"/></svg></span>
+        </a>
+        <a class="programme-row" href="services.html#family">
+          <span class="programme-idx">02</span>
+          <h3>Family counselling</h3>
+          <p>Support for families working through communication and connection.</p>
+          <span class="programme-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="#17171a" stroke-width="1.6"/></svg></span>
+        </a>
+        <a class="programme-row" href="services.html#youth">
+          <span class="programme-idx">03</span>
+          <h3>Youth development</h3>
+          <p>Mentorship, leadership and life skills for young people.</p>
+          <span class="programme-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="#17171a" stroke-width="1.6"/></svg></span>
+        </a>
+        <a class="programme-row" href="services.html#economic">
+          <span class="programme-idx">04</span>
+          <h3>Economic empowerment</h3>
+          <p>Practical pathways into skills, enterprise and sustainable income.</p>
+          <span class="programme-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="#17171a" stroke-width="1.6"/></svg></span>
+        </a>
+        <a class="programme-row" href="services.html#mentorship">
+          <span class="programme-idx">05</span>
+          <h3>Mentorship</h3>
+          <p>One-on-one relationships that help people grow with direction.</p>
+          <span class="programme-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="#17171a" stroke-width="1.6"/></svg></span>
+        </a>
+        <a class="programme-row" href="services.html#skills">
+          <span class="programme-idx">06</span>
+          <h3>Skills development</h3>
+          <p>Training that turns ability into livelihood.</p>
+          <span class="programme-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="#17171a" stroke-width="1.6"/></svg></span>
+        </a>
+        <a class="programme-row" href="services.html#outreach">
+          <span class="programme-idx">07</span>
+          <h3>Community outreach</h3>
+          <p>Reaching people where they are, not waiting for them to arrive.</p>
+          <span class="programme-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="#17171a" stroke-width="1.6"/></svg></span>
+        </a>
+        <a class="programme-row" href="services.html#spiritual">
+          <span class="programme-idx">08</span>
+          <h3>Spiritual growth</h3>
+          <p>Space to grow in character, purpose and service to others.</p>
+          <span class="programme-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="#17171a" stroke-width="1.6"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ IMPACT ============ -->
+  <section class="impact-section" data-reveal>
+    <div class="container">
+      <div class="section-head">
+        <p class="kicker">Our impact</p>
+        <h2>Impact begins with one person.</h2>
+        <p>These figures are placeholders until verified Bathopedi data is available.</p>
+      </div>
+      <div class="impact-grid">
+        <div class="impact-item">
+          <p class="impact-number">TBC</p>
+          <p class="impact-label">People supported</p>
+          <p class="impact-placeholder-note">Replace with verified Bathopedi data</p>
+        </div>
+        <div class="impact-item">
+          <p class="impact-number">TBC</p>
+          <p class="impact-label">Families reached</p>
+          <p class="impact-placeholder-note">Replace with verified Bathopedi data</p>
+        </div>
+        <div class="impact-item">
+          <p class="impact-number">TBC</p>
+          <p class="impact-label">Community initiatives</p>
+          <p class="impact-placeholder-note">Replace with verified Bathopedi data</p>
+        </div>
+        <div class="impact-item">
+          <p class="impact-number">TBC</p>
+          <p class="impact-label">Partnerships</p>
+          <p class="impact-placeholder-note">Replace with verified Bathopedi data</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STORIES ============ -->
+  <section data-reveal>
+    <div class="container">
+      <div class="section-head" style="margin-bottom:20px;">
+        <p class="kicker">Focus areas</p>
+        <h2>The kinds of support people come to us for.</h2>
+      </div>
+      <div class="story-mosaic">
+        <div class="story-tile">
+          <p class="story-quote">Family support</p>
+          <span class="story-tag">Helping couples and families work through hard seasons together</span>
+        </div>
+        <div class="story-tile">
+          <p class="story-quote">Personal growth</p>
+          <span class="story-tag">One-on-one guidance for people figuring out their next step</span>
+        </div>
+        <div class="story-tile">
+          <p class="story-quote">Economic empowerment</p>
+          <span class="story-tag">Building income through the stokvel model and small enterprise</span>
+        </div>
+        <div class="story-tile">
+          <p class="story-quote">Marriage support</p>
+          <span class="story-tag">A safe space to prepare for marriage or rebuild what's strained</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GALLERY ============ -->
+  <section id="gallery" data-reveal>
+    <div class="container">
+      <div class="section-head" style="margin-bottom:20px;">
+        <p class="kicker">Gallery</p>
+        <h2>The community, in time.</h2>
+        <p>Moments from our outreach on the ground. More photos are added as new activities happen.</p>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-tile"><img src="economic-outreach-setsoto.jpg" alt="Bathopedi volunteers at an economic outreach stall with the Setsoto Local Municipality" loading="lazy" width="900" height="900"><span>Economic outreach</span></div>
+        <div class="gallery-tile"><img src="marriage-support-couple-1.jpg" alt="A couple embracing beside Bathopedi Initiative banners during a home visit" loading="lazy" width="900" height="900"><span>Marriage &amp; family support</span></div>
+        <div class="gallery-tile"><img src="community-unity-hillside.jpg" alt="A group joining hands together on a hillside during a Bathopedi community visit" loading="lazy" width="900" height="900"><span>Community</span></div>
+        <div class="gallery-tile"><img src="family-visit-couple-2.jpg" alt="An older couple standing together during a Bathopedi family visit" loading="lazy" width="900" height="900"><span>Family visits</span></div>
+        <div class="gallery-tile"><img src="community-engagement-men.jpg" alt="Three men at a community engagement session with Bathopedi Initiative banners" loading="lazy" width="900" height="900"><span>Community engagement</span></div>
+        <div class="gallery-tile"><img src="marriage-support-couple-3.jpg" alt="A couple laughing together during a Bathopedi Initiative home visit" loading="lazy" width="900" height="900"><span>Marriage &amp; family support</span></div>
+        <div class="gallery-tile"><img src="community-outreach-hillside-group.jpg" alt="A group of community members with Bathopedi Initiative banners on a hillside" loading="lazy" width="900" height="900"><span>Outreach</span></div>
+        <div class="gallery-tile"><img src="community-outreach-township-view.jpg" alt="Community members with Bathopedi Initiative banners overlooking a township" loading="lazy" width="900" height="900"><span>Outreach</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ECOSYSTEM CHOOSER ============ -->
+  <section class="eco-chooser-section" id="ecosystem" data-reveal>
+    <div class="container">
+      <div class="section-head" style="margin-bottom:32px;">
+        <p class="kicker">The Bathopedi ecosystem</p>
+        <h2>One mission, three doors.</h2>
+        <p>Foundation is live today. Stores and Chats are on their way. Tap a card to see what each one is for.</p>
+      </div>
+
+      <div class="eco-chooser">
+        <div class="eco-chips" id="ecoChips">
+          <button type="button" class="eco-chip" data-eco="foundation" aria-expanded="false" aria-controls="ecoExpanded">
+            <span class="eco-chip-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4l8 7.5"/><path d="M6 10v9.5h5v-6h2v6h5V10"/></svg>
+            </span>
+            <span>
+              <span class="eco-chip-title">Foundation</span>
+              <span class="eco-chip-status">Active: you're here</span>
+            </span>
+          </button>
+
+          <button type="button" class="eco-chip" data-eco="stores" aria-expanded="false" aria-controls="ecoExpanded">
+            <span class="eco-chip-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1.4-5h13.2L20 9"/><path d="M4 9v10.5h16V9"/><path d="M4 9h16"/><path d="M9.5 19.5v-5.5h5v5.5"/></svg>
+            </span>
+            <span>
+              <span class="eco-chip-title">Stores</span>
+              <span class="eco-chip-status">Coming soon</span>
+            </span>
+          </button>
+
+          <button type="button" class="eco-chip" data-eco="chats" aria-expanded="false" aria-controls="ecoExpanded">
+            <span class="eco-chip-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8 8 0 01-11.9 6.9L4 19.5l1.1-4.4a8 8 0 1115.4-3.6z"/></svg>
+            </span>
+            <span>
+              <span class="eco-chip-title">Chats</span>
+              <span class="eco-chip-status">Coming soon</span>
+            </span>
+          </button>
+        </div>
+
+        <div class="eco-expanded-wrap" id="ecoExpandedWrap">
+          <div>
+            <div id="ecoExpanded"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FINAL CTA ============ -->
+  <section class="final-cta section-rule-top" data-reveal>
+    <div class="container">
+      <h2>Change begins with connection.</h2>
+      <p>Whether you need support, want to volunteer, have an idea, or want to help build something meaningful, there's a place for you at Bathopedi.</p>
+      <div class="final-cta-btns">
+        <a href="get-involved.html#support" class="btn btn-solid">I need support</a>
+        <a href="get-involved.html#volunteer" class="btn btn-ghost">I want to help</a>
+        <a href="get-involved.html#partner" class="btn btn-gold">Partner with us</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">
+          <span class="footer-logo-badge"><img src="logo.png" alt="Bathopedi Initiative" class="footer-logo-img"></span>
+          <span>Bathopedi Initiative</span>
+        </div>
+        <p class="footer-mission">Growing people. Strengthening families. Building communities.</p>
+        <div class="newsletter">
+          <input type="email" placeholder="Your email address" aria-label="Email address for newsletter" id="newsletterEmail">
+          <button type="button" id="newsletterBtn">Keep me connected</button>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Foundation</h4>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="services.html">Our work</a></li>
+          <li><a href="impact.html">Impact</a></li>
+          <li><a href="get-involved.html">Get involved</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Ecosystem</h4>
+        <ul>
+          <li><a href="index.html">Foundation</a></li>
+          <li><span class="soon">Stores (coming soon)</span></li>
+          <li><span class="soon">Chats (coming soon)</span></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="get-involved.html#support">Get support</a></li>
+          <li><a href="get-involved.html#volunteer">Volunteer</a></li>
+          <li><a href="get-involved.html#partner">Partner</a></li>
+          <li><a href="get-involved.html#donate">Support the mission</a></li>
+          <li><a href="get-involved.html#membership">Membership</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Organisation</h4>
+        <ul>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="terms.html">Terms</a></li>
+          <li><a href="safeguarding.html">Safeguarding</a></li>
+          <li><a href="contact.html">Talk to us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Bathopedi Initiative. Registration details to be confirmed.</span>
+      <ul class="footer-bottom-links">
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+        <li><a href="safeguarding.html">Safeguarding</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ MOBILE STICKY CTA ============ -->
+<div class="sticky-cta" id="stickyCta">
+  <a href="get-involved.html#support">Get support</a>
+</div>
+
+<!-- ============ ECOSYSTEM OVERLAY ============ -->
+<div class="ecosystem-overlay" id="ecosystemOverlay" role="dialog" aria-modal="true" aria-label="Bathopedi ecosystem">
+  <button class="ecosystem-close" id="ecosystemClose" aria-label="Close">&times;</button>
+  <div class="ecosystem-panel">
+    <div class="ecosystem-panel-head">
+      <p class="eyebrow">Bathopedi</p>
+      <h2>Where would you like to begin?</h2>
+    </div>
+    <div class="ecosystem-options">
+      <a class="eco-option" href="index.html">
+        <span class="eco-tags">Community &middot; Growth &middot; Support</span>
+        <h3>Foundation</h3>
+        <p class="eco-desc">Explore the work of Bathopedi Initiative.</p>
+        <span class="eco-status active">Active</span>
+      </a>
+      <a class="eco-option" href="stores-coming-soon.html">
+        <span class="eco-tags">Products &middot; Enterprise &middot; Opportunity</span>
+        <h3>Stores</h3>
+        <p class="eco-desc">Discover the future Bathopedi marketplace.</p>
+        <span class="eco-status">Coming soon</span>
+      </a>
+      <a class="eco-option" href="chats-coming-soon.html">
+        <span class="eco-tags">Connect &middot; Talk &middot; Belong</span>
+        <h3>Chats</h3>
+        <p class="eco-desc">Connect with the Bathopedi community.</p>
+        <span class="eco-status">Coming soon</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // iOS Safari only applies :active/:hover styles to a tap when some
+  // touch listener exists on the page, otherwise taps skip straight
+  // to :focus and every hover/press effect above silently never runs
+  // on iPhone. This is a standard, harmless no-op fix for that.
+  document.addEventListener('touchstart', function(){}, { passive:true });
+
+  // Let an impatient visitor tap/click straight past the entrance reveal.
+  // The CSS animation removes it on its own regardless; this just lets
+  // someone skip ahead of that timer if they want to.
+  (function(){
+    var reveal = document.getElementById('entranceReveal');
+    if(!reveal) return;
+    reveal.addEventListener('click', function(){ reveal.style.display = 'none'; });
+  })();
+
+  // Placeholder links (e.g. social icons awaiting a real URL) don't
+  // navigate anywhere yet, prevent the "#" jump until they're filled in.
+  document.querySelectorAll('a.is-placeholder-link').forEach(function(a){
+    a.addEventListener('click', function(e){ e.preventDefault(); });
+  });
+
+  // Mark the current page's nav links (desktop + mobile) so the
+  // active section of the site is identifiable, per-page.
+  (function initializeNavigation(){
+    var here = (location.pathname.split('/').pop() || 'index.html');
+    document.querySelectorAll('nav.primary-links a, .mobile-drawer nav a').forEach(function(a){
+      var href = (a.getAttribute('href') || '').split('#')[0];
+      if(href && href === here){ a.classList.add('is-current'); a.setAttribute('aria-current','page'); }
+    });
+  })();
+
+  // Mobile drawer
+  (function(){
+    var drawer = document.getElementById('mobileDrawer');
+    var openBtn = document.getElementById('mobileMenuOpen');
+    var closeBtn = document.getElementById('mobileMenuClose');
+    function open(){ drawer.classList.add('open'); openBtn.setAttribute('aria-expanded','true'); }
+    function close(){ drawer.classList.remove('open'); openBtn.setAttribute('aria-expanded','false'); }
+    openBtn.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape') close(); });
+  })();
+
+  // Ecosystem switcher overlay
+  (function(){
+    var overlay = document.getElementById('ecosystemOverlay');
+    var openBtn = document.getElementById('ecosystemOpen');
+    var closeBtn = document.getElementById('ecosystemClose');
+    function open(){ overlay.classList.add('open'); openBtn.setAttribute('aria-expanded','true'); }
+    function close(){ overlay.classList.remove('open'); openBtn.setAttribute('aria-expanded','false'); }
+    openBtn.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    overlay.addEventListener('click', function(e){ if(e.target === overlay) close(); });
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape') close(); });
+  })();
+
+  // Scroll reveal
+  (function(){
+    var items = document.querySelectorAll('[data-reveal]');
+    if(!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      items.forEach(function(el){ el.classList.add('in-view'); });
+      return;
+    }
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    items.forEach(function(el){ obs.observe(el); });
+  })();
+
+  // Ecosystem chooser: expanding cards + disclosure panel
+  (function(){
+    var chevronSvg = '<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+    var pageIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg>';
+    var tagIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>';
+
+    var ecoData = {
+      foundation: {
+        color: 'foundation',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4l8 7.5"/><path d="M6 10v9.5h5v-6h2v6h5V10"/></svg>',
+          title: 'Foundation',
+        subtitle: 'The main Bathopedi Initiative website, active now.',
+        triggerLabel: 'View the five Foundation pages',
+        rows: [
+          { href:'index.html', title:'Home', desc:'The mission, at a glance' },
+          { href:'about.html', title:'About', desc:'Our story, mission and values' },
+          { href:'services.html', title:'Services & Programmes', desc:'Counselling, mentorship, opportunity' },
+          { href:'impact.html', title:'Impact & Stories', desc:'What Bathopedi is building toward' },
+          { href:'get-involved.html', title:'Get Involved', desc:'Support, volunteer or partner' }
+        ],
+        notify:false
+      },
+      stores: {
+        color:'stores',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1.4-5h13.2L20 9"/><path d="M4 9v10.5h16V9"/><path d="M4 9h16"/><path d="M9.5 19.5v-5.5h5v5.5"/></svg>',
+        title:'Stores',
+        subtitle:'A future Bathopedi marketplace: economic opportunity you can shop and sell into.',
+        triggerLabel: "What Stores will offer",
+        rows:[
+          { title:'Products & marketplace listings', desc:'Coming soon', static:true },
+          { title:'Enterprise & partner storefronts', desc:'Coming soon', static:true },
+          { title:'Opportunity for local creators', desc:'Coming soon', static:true }
+        ],
+        notify:true
+      },
+      chats: {
+        color:'chats',
+        icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8 8 0 01-11.9 6.9L4 19.5l1.1-4.4a8 8 0 1115.4-3.6z"/></svg>',
+        title:'Chats',
+        subtitle:'A future space to connect with support, mentors and the wider community.',
+        triggerLabel:'What Chats will offer',
+        rows:[
+          { title:'Connect with support & counsellors', desc:'Coming soon', static:true },
+          { title:'Talk with mentors', desc:'Coming soon', static:true },
+          { title:'Belong to community groups', desc:'Coming soon', static:true }
+        ],
+        notify:true
+      }
+    };
+
+    var chips = document.querySelectorAll('.eco-chip');
+    var wrap = document.getElementById('ecoExpandedWrap');
+    var mount = document.getElementById('ecoExpanded');
+    var activeKey = null;
+
+    function renderRow(row){
+      var icon = row.static ? tagIcon : pageIcon;
+      var tag = row.static ? '<span class="eco-row-tag">Soon</span>' : '';
+      var content = '<span class="eco-row-icon">'+icon+'</span><span class="eco-row-text"><strong>'+row.title+'</strong><small>'+row.desc+'</small></span>'+tag;
+      if(row.static){
+        return '<div class="eco-row">'+content+'</div>';
+      }
+      return '<a class="eco-row is-link" href="'+row.href+'">'+content+'</a>';
+    }
+
+    function render(key){
+      var d = ecoData[key];
+      var rowsHtml = d.rows.map(renderRow).join('');
+      var notifyHtml = d.notify ? '<form class="eco-notify" data-eco-notify><input type="email" required placeholder="Your email address" aria-label="Email address"><button type="submit">Notify me</button></form>' : '';
+      mount.innerHTML =
+        '<div class="eco-expanded" data-eco="'+d.color+'">' +
+          '<div class="eco-expanded-top">' +
+            '<span class="eco-icon-badge">'+d.icon+'</span>' +
+            '<button type="button" class="eco-close" aria-label="Collapse">&times;</button>' +
+          '</div>' +
+          '<div class="eco-expanded-body"><h3>'+d.title+'</h3><p>'+d.subtitle+'</p></div>' +
+          '<button type="button" class="eco-disclosure-trigger" aria-expanded="false">' +
+            '<span>'+d.triggerLabel+'</span>'+chevronSvg +
+          '</button>' +
+          '<div class="eco-disclosure-panel"><div><div class="eco-disclosure-inner">'+rowsHtml+notifyHtml+'</div></div></div>' +
+        '</div>';
+
+      mount.querySelector('.eco-close').addEventListener('click', function(){
+        collapse();
+      });
+      var trigger = mount.querySelector('.eco-disclosure-trigger');
+      var panel = mount.querySelector('.eco-disclosure-panel');
+      trigger.addEventListener('click', function(){
+        var isOpen = panel.classList.toggle('open');
+        trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+      var notifyForm = mount.querySelector('[data-eco-notify]');
+      if(notifyForm){
+        notifyForm.addEventListener('submit', function(e){
+          e.preventDefault();
+          var btn = notifyForm.querySelector('button');
+          var input = notifyForm.querySelector('input');
+          if(input.checkValidity() && input.value){
+            btn.textContent = 'Thank you';
+            input.value = '';
+            setTimeout(function(){ btn.textContent = 'Notify me'; }, 3000);
+          }
+        });
+      }
+    }
+
+    function collapse(){
+      activeKey = null;
+      wrap.classList.remove('open');
+      chips.forEach(function(c){ c.classList.remove('is-active'); c.setAttribute('aria-expanded','false'); });
+    }
+
+    function expand(key, chip){
+      activeKey = key;
+      render(key);
+      wrap.classList.add('open');
+      chips.forEach(function(c){
+        var isThis = c === chip;
+        c.classList.toggle('is-active', isThis);
+        c.setAttribute('aria-expanded', isThis ? 'true' : 'false');
+      });
+    }
+
+    chips.forEach(function(chip){
+      chip.addEventListener('click', function(){
+        var key = chip.getAttribute('data-eco');
+        if(activeKey === key){
+          collapse();
+        } else {
+          expand(key, chip);
+        }
+      });
+    });
+  })();
+
+  // Newsletter demo success state
+  (function(){
+    var btn = document.getElementById('newsletterBtn');
+    var input = document.getElementById('newsletterEmail');
+    btn.addEventListener('click', function(){
+      if(input.checkValidity() && input.value){
+        btn.textContent = 'Thank you';
         input.value = '';
+        setTimeout(function(){ btn.textContent = 'Keep me connected'; }, 3000);
+      } else {
+        input.focus();
       }
     });
-  </script>
+  })();
+
+  // Interactive logo: works with mouse hover (via CSS), and with
+  // touch/click + keyboard here, since touch devices have no hover.
+  (function(){
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduceMotion) return;
+    var marks = document.querySelectorAll('.brand-mark');
+    marks.forEach(function(mark){
+      var timer;
+      function pulse(){
+        mark.classList.add('is-tapped');
+        clearTimeout(timer);
+        timer = setTimeout(function(){ mark.classList.remove('is-tapped'); }, 650);
+      }
+      mark.addEventListener('click', pulse);
+      mark.addEventListener('touchstart', pulse, { passive:true });
+    });
+  })();
+</script>
 
 </body>
 </html>
